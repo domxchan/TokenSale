@@ -2,9 +2,9 @@
 pragma solidity ^0.8.16;
 
 import "./Crowdsale.sol";
-// import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
-// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
+// import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
+// import "./ERC20Mintable.sol";
+import "./IERC20Mintable.sol";
 
 /**
  * @title MintedCrowdsale
@@ -23,11 +23,6 @@ contract MintedCrowdsale is Crowdsale {
      */
     function _deliverTokens(address beneficiary, uint256 tokenAmount) override internal {
         // Potentially dangerous assumption about the type of the token.
-        // require(
-        //     ERC20PresetMinterPauser(address(token())).mint(beneficiary, tokenAmount),
-        //         "MintedCrowdsale: minting failed"
-        // );
-
-        ERC20PresetMinterPauser(address(token())).mint(beneficiary, tokenAmount);
+        IERC20Mintable(address(token())).mint(beneficiary, tokenAmount);
     }
 }

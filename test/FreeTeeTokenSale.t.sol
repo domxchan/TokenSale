@@ -54,7 +54,7 @@ contract FreeTeeTokenSaleTest is BaseSetup {
         token = new FreeTeeToken();
         // console.log(token.getRoleMemberCount(MINTER_ROLE), " MINTER_ROLE 0 ", token.getRoleMember(MINTER_ROLE,0));
 
-        sale = new FreeTeeTokenSale(1, wallet, IERC20(token));
+        sale = new FreeTeeTokenSale(1, wallet, address(token));
         saleAddress = payable(address(sale));
         // console.log("sale contract address is: ", address(sale));
 

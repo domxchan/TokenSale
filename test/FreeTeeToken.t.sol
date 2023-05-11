@@ -96,15 +96,17 @@ contract FreeTeeTokenTest is BaseSetup {
         vm.stopPrank();
     }
 
-    // function test_OwnerTransfersToBobThenOwnerBurnsBob(uint initialSupply_, uint amtTsf, uint amtBurnt) public {
-    //     vm.assume(initialSupply_ > 0);
-    //     initialSupply = initialSupply_;
-    //     amtTsf = bound(amtTsf, 1, initialSupply);
-    //     amtBurnt = bound(amtBurnt, 1, amtTsf);
-    //     test_OwnerTransfersToBob(initialSupply, amtTsf);
-    //     freeTeeToken.burnFrom(bob,amtBurnt);
-    //     assertEq(freeTeeToken.totalSupply(), initialSupply - amtBurnt);
-    //     assertEq(freeTeeToken.balanceOf(bob), amtTsf - amtBurnt);
-    // }
+    function test_OwnerTransfersToBobThenBobClaims(uint initialSupply_, uint amtTsf, uint amtClaimed) public {
+        vm.assume(initialSupply_ > 0 && initialSupply_ > freeTeeToken.costClaim());
+        initialSupply = initialSupply_;
+        amtTsf = bound(amtTsf, freeTeeToken.costClaim(), initialSupply);
+        amtClaimed = bound(amtClaimed, 1, amtTsf);
+        test_OwnerTransfersToBob(initialSupply, amtTsf);
+
+        vm.prank(bob);
+        freeTeeToken.claim();
+        assertEq(freeTeeToken.totalSupply(), initialSupply - (freeTeeToken.costClaim()));
+        assertEq(freeTeeToken.balanceOf(bob), amtTsf - (freeTeeToken.costClaim()));
+    }
 
 }
